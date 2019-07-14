@@ -4,9 +4,12 @@
 #include <fcntl.h>
 #include <bcm2835.h>
 #include <string.h>
-
+#include <boost/process.hpp>
 
 #include "EtherBerry.h"
+
+using namespace boost::process;
+namespace bp = boost::process; 
 
 
 EtherBerry  ETHB;
@@ -29,9 +32,15 @@ int main()
 
     if (!EtherBerryInit) exit(1);                                                   
 
-    system("aplay ../casiers.wav","r");
 
-    pclose(handle);
+    bp::child c(bp::search_path("aplay"), "~/sounds/casiers.wav");
+
+    while( c.running() )
+	printf("running\n");
+
+    c.wait();
+    printf("%d\n",c.exit_code());
+
 
     while (1)
     {

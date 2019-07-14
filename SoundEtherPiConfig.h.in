@@ -1,0 +1,3 @@
+// the configured options and settings 
+#define SoundEtherPi_VERSION_MAJOR @SoundEtherPi_VERSION_MAJOR@
+#define SoundEtherPi_VERSION_MINOR @SoundEtherPi_VERSION_MINOR@
