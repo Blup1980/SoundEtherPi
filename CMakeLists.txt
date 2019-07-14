@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.13)
 project (SoundEtherPi)
 # The version number.
 set (SoundEtherPi_VERSION_MAJOR 1)
@@ -22,11 +22,13 @@ include_directories("${PROJECT_BINARY_DIR}")
 set(Boost_USE_STATIC_LIBS OFF) 
 set(Boost_USE_MULTITHREADED ON)  
 set(Boost_USE_STATIC_RUNTIME OFF) 
-find_package(Boost 1.65.0 COMPONENTS process) 
+find_package(Boost 1.67.0 REQUIRED system filesystem) 
+
+
 
 if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS}) 
-    add_executable(SoundEtherPi SoundEtherpi.cpp EtherBerry.cpp)
-    target_link_libraries(SoundEtherPi ${Boost_LIBRARIES})
+    include_directories (SYSTEM ${Boost_INCLUDE_DIR})
+    add_executable(SoundEtherPi SoundEtherPi.cpp EtherBerry.cpp soundPlayer.cpp)
+    target_link_libraries(SoundEtherPi ${Boost_LIBRARIES} bcm2835 -lpthread -lm)
 endif()
 
