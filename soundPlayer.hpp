@@ -8,7 +8,7 @@ class soundPlayer
 {
     public:
 
-    soundPlayer();
+    soundPlayer(uint8_t channelNbIn);
 
     void play(boost::filesystem::path soundFile, bool playInLoop);
     void stop();
@@ -22,6 +22,7 @@ class soundPlayer
     bool launched = false;
     bool loop = false;
     boost::filesystem::path aplayPath;
+    uint8_t channelNb;
 };
 
 #endif

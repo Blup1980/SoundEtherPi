@@ -1,6 +1,7 @@
-#include<iostream>
-#include<boost/process.hpp>
-#include<boost/filesystem.hpp>
+#include <iostream>
+#include <boost/process.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/format.hpp>
 #include "soundPlayer.hpp"
 
 
@@ -10,14 +11,15 @@ using namespace boost::filesystem;
 using namespace std;
 
 
-soundPlayer::soundPlayer(){
+soundPlayer::soundPlayer(uint8_t channelNbIn){
     aplayPath = boost::process::search_path("aplay");
+    channelNb = channelNbIn;
 }
 
 void soundPlayer::play(boost::filesystem::path soundFile, bool playInLoop) {
     if ( launched == false ) { 
-        sound = soundFile;
-        player = boost::process::child(aplayPath, sound);
+        string channelArg = str(boost::format("-Dsound%d") % static_cast<int>(channelNb + 1));
+        player = boost::process::child(aplayPath, channelArg, soundFile);
         loop = playInLoop;
         launched = true;   
     }

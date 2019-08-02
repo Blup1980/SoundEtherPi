@@ -35,7 +35,7 @@ boost::filesystem::path toFileName( uint16_t soundNb )
 
 int main()
 {       
-    soundPlayer players[SOUND_CHANNELS];
+    soundPlayer* players[SOUND_CHANNELS];
     soundMixer* mixers[SOUND_CHANNELS];
 
 
@@ -47,6 +47,7 @@ int main()
 
     
     for (uint8_t i=0; i<SOUND_CHANNELS ; i++) {
+        players[i] = new soundPlayer(i);
         mixers[i] = new soundMixer(i);
     }
 
@@ -96,8 +97,8 @@ int main()
     {
         for( uint8_t i=0; i < SOUND_CHANNELS; i++) {
             mixers[i]->setVolume(*volumeLeft[i], *volumeRight[i]);
-            players[i].worker();
-            if (players[i].isRunning() )
+            players[i]->worker();
+            if (players[i]->isRunning() )
                 *statusPtr[i] |= STATUS_PLAYING;
             else
                 *statusPtr[i] &= ~STATUS_PLAYING;
@@ -106,10 +107,10 @@ int main()
 
             if (*cmdPtr[i] & CMD_PLAY) {
                 // printf("requested to play ptr %u \n",i);
-                players[i].play( toFileName(*soundNbPtr[i]), *cmdPtr[i] & CMD_LOOP );
+                players[i]->play( toFileName(*soundNbPtr[i]), *cmdPtr[i] & CMD_LOOP );
               
             } else {
-                players[i].stop();   
+                players[i]->stop();   
             }
         }
 
