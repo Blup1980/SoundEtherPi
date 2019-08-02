@@ -8,6 +8,7 @@
 
 #include "EtherBerry.h"
 #include "soundPlayer.hpp"
+#include "soundMixer.hpp"
 
 
 #define STATUS_PLAYING 0x01
@@ -35,11 +36,20 @@ boost::filesystem::path toFileName( uint16_t soundNb )
 int main()
 {       
     soundPlayer players[SOUND_CHANNELS];
+    soundMixer* mixers[SOUND_CHANNELS];
+
 
     uint8_t *statusPtr[SOUND_CHANNELS];
     uint8_t *cmdPtr[SOUND_CHANNELS];
     uint16_t *soundNbPtr[SOUND_CHANNELS];
+    uint8_t *volumeLeft[SOUND_CHANNELS];
+    uint8_t *volumeRight[SOUND_CHANNELS];
+
     
+    for (uint8_t i=0; i<SOUND_CHANNELS ; i++) {
+        mixers[i] = new soundMixer(i);
+    }
+
     statusPtr[0] = &ETHB.BufferIn.Cust.sound1_status;
     statusPtr[1] = &ETHB.BufferIn.Cust.sound2_status;
     statusPtr[2] = &ETHB.BufferIn.Cust.sound3_status;
@@ -52,6 +62,17 @@ int main()
     cmdPtr[3] = &ETHB.BufferOut.Cust.sound4_cmd; 
     cmdPtr[4] = &ETHB.BufferOut.Cust.sound5_cmd; 
 
+    volumeLeft[0] = &ETHB.BufferOut.Cust.sound1_left_volume;
+    volumeLeft[1] = &ETHB.BufferOut.Cust.sound2_left_volume;
+    volumeLeft[2] = &ETHB.BufferOut.Cust.sound3_left_volume;
+    volumeLeft[3] = &ETHB.BufferOut.Cust.sound4_left_volume;
+    volumeLeft[4] = &ETHB.BufferOut.Cust.sound5_left_volume;
+
+    volumeRight[0] = &ETHB.BufferOut.Cust.sound1_right_volume;
+    volumeRight[1] = &ETHB.BufferOut.Cust.sound2_right_volume;
+    volumeRight[2] = &ETHB.BufferOut.Cust.sound3_right_volume;
+    volumeRight[3] = &ETHB.BufferOut.Cust.sound4_right_volume;
+    volumeRight[4] = &ETHB.BufferOut.Cust.sound5_right_volume;
 
     soundNbPtr[0] = &ETHB.BufferOut.Cust.sound1_nb;
     soundNbPtr[1] = &ETHB.BufferOut.Cust.sound2_nb;
@@ -74,6 +95,7 @@ int main()
     while (1)
     {
         for( uint8_t i=0; i < SOUND_CHANNELS; i++) {
+            mixers[i]->setVolume(*volumeLeft[i], *volumeRight[i]);
             players[i].worker();
             if (players[i].isRunning() )
                 *statusPtr[i] |= STATUS_PLAYING;

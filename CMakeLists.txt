@@ -28,7 +28,7 @@ find_package(Boost 1.67.0 REQUIRED system filesystem)
 
 if(Boost_FOUND)
     include_directories (SYSTEM ${Boost_INCLUDE_DIR})
-    add_executable(SoundEtherPi SoundEtherPi.cpp EtherBerry.cpp soundPlayer.cpp)
+    add_executable(SoundEtherPi SoundEtherPi.cpp EtherBerry.cpp soundPlayer.cpp soundMixer.cpp)
     target_link_libraries(SoundEtherPi ${Boost_LIBRARIES} bcm2835 -lpthread -lm)
 endif()
 

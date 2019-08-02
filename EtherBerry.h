@@ -163,7 +163,7 @@
 
 //typedef 
 #define CUSTOM
-#define CUST_BYTE_NUM_OUT	15
+#define CUST_BYTE_NUM_OUT	25
 #define CUST_BYTE_NUM_IN	5
 
 //*************************************************************************************
@@ -339,12 +339,12 @@ typedef union
 
 
 
-typedef union												//---- output buffer ----
+typedef union
 {
 	uint8_t  Byte [TOT_BYTE_NUM_ROUND_OUT];
 	struct
 	{
-		uint16_t    sound1_nb;
+	uint16_t    sound1_nb;
 		uint16_t    sound2_nb;
 		uint16_t    sound3_nb;
 		uint16_t    sound4_nb;
@@ -354,10 +354,20 @@ typedef union												//---- output buffer ----
 		uint8_t     sound4_cmd;
 		uint8_t     sound1_cmd;
 		uint8_t     sound5_cmd;
+		uint8_t     sound1_left_volume;
+		uint8_t     sound1_right_volume;
+		uint8_t     sound2_left_volume;
+		uint8_t     sound2_right_volume;
+		uint8_t     sound3_left_volume;
+		uint8_t     sound3_right_volume;
+		uint8_t     sound4_left_volume;
+		uint8_t     sound4_right_volume;
+		uint8_t     sound5_left_volume;
+		uint8_t     sound5_right_volume;
 	}Cust;
 } PROCBUFFER_OUT;
 
-typedef union												//---- input buffer ----
+typedef union
 {
 	uint8_t  Byte [TOT_BYTE_NUM_ROUND_IN];
 	struct
@@ -389,22 +399,13 @@ class EtherBerry
 
  // standard SPI chip select management 
 
-      #define SCS_Low_macro     bcm2835_gpio_write(PIN, LOW);
-      #define SCS_High_macro    bcm2835_gpio_write(PIN, HIGH);
-   
+    #define SCS_Low_macro     bcm2835_gpio_write(PIN, LOW);
+    #define SCS_High_macro    bcm2835_gpio_write(PIN, HIGH);
 
+ // standard SPI transfert 
 
-
-
-// standard SPI transfert 
-
-
-      void SPI_Write(unsigned char Data);
-      unsigned char SPI_Read(unsigned char Data);
-
- 
-
-
+   void SPI_Write(unsigned char Data);
+   unsigned char SPI_Read(unsigned char Data);
 };
 #endif
 
