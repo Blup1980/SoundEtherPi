@@ -13,6 +13,7 @@ class soundPlayer
     void play(boost::filesystem::path soundFile, bool playInLoop);
     void stop();
     bool isRunning();
+    bool isLaunched();
     void worker();
     bool hasNeverPlayed();
 

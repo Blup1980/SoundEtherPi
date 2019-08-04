@@ -18,6 +18,7 @@ soundPlayer::soundPlayer(uint8_t channelNbIn){
 
 void soundPlayer::play(boost::filesystem::path soundFile, bool playInLoop) {
     if ( launched == false ) { 
+        sound = soundFile;
         string channelArg = str(boost::format("-Dsound%d") % static_cast<int>(channelNb + 1));
         player = boost::process::child(aplayPath, channelArg, soundFile);
         loop = playInLoop;
@@ -37,19 +38,23 @@ bool soundPlayer::isRunning(){
     if(player != NULL){
         return player.running();
     } else {
-	    return false;
+        return false;
     }
+}
+
+bool soundPlayer::isLaunched(){
+    return launched;
 }
 
 void soundPlayer::worker() {
     if (launched == true) {
         if( isRunning() != true ){
             if( loop ) {
-	        	launched = false;
-	            play(sound, loop);
+                launched = false;
+                play(sound, loop);
             } else {
                 player.wait();
-		    }
+            }
         }
     }
 }

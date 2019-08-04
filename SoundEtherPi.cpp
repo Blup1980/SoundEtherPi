@@ -12,7 +12,7 @@
 
 
 #define STATUS_PLAYING 0x01
-#define STATUS_LOOP    0x02
+#define STATUS_LAUNCHED 0x02
 
 #define CMD_PLAY       0x01
 #define CMD_LOOP       0x02
@@ -102,6 +102,12 @@ int main()
                 *statusPtr[i] |= STATUS_PLAYING;
             else
                 *statusPtr[i] &= ~STATUS_PLAYING;
+
+            
+            if (players[i]->isLaunched() )
+                *statusPtr[i] |= STATUS_LAUNCHED;
+            else
+                *statusPtr[i] &= ~STATUS_LAUNCHED;
 
             // printf("command %d = %d\n",i,*cmdPtr[i]);
 
